@@ -4,6 +4,7 @@ import 'package:incredibleapp/intro_screen1.dart';
 import 'package:incredibleapp/intro_screen2.dart';
 import 'package:incredibleapp/intro_screen3.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+//import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoard extends StatefulWidget {
   const OnBoard({Key? key}) : super(key: key);

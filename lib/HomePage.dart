@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
+import 'package:incredibleapp/PolylineScreen.dart';
 import 'package:incredibleapp/ShopDetails.dart';
 import 'package:incredibleapp/small_text.dart';
 
@@ -135,13 +136,26 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
           ),
-          Center(
-            child: Container(
-              width: 320,
-              height: 250,
-              child: Image(
-                image: NetworkImage(
-                    "https://mologmedia.s3.ap-south-1.amazonaws.com/GoogleMapImage.png"),
+          InkWell(
+            onTap: () {
+              print("okokokokoko");
+              print(mapUserInfo);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      PolylineScreen(mapUserInfo: mapUserInfo!),
+                ),
+              );
+            },
+            child: Center(
+              child: Container(
+                width: 320,
+                height: 250,
+                child: Image(
+                  image: NetworkImage(
+                      "https://mologmedia.s3.ap-south-1.amazonaws.com/GoogleMapImage.png"),
+                ),
               ),
             ),
           )

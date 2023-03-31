@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:incredibleapp/FlutterMap.dart';
 import 'package:incredibleapp/HomePage.dart';
-import 'package:incredibleapp/PolyLinePage.dart';
+import 'package:incredibleapp/PolylineScreen.dart';
+import 'package:incredibleapp/directionsPoly.dart';
 
 import 'CustomMarkerInfoWindowState.dart';
 import 'colors.dart';
