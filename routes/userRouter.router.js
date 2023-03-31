@@ -125,6 +125,7 @@ userRouter.get('/createTestMerchant',async (req,res)=>{
 userRouter.get('/getRecentDeals',async (req,res)=>{
     //
     try{
+        const radian_distance = kmToRadians(req.query.distinKm?req.query.distinKm:40)
         const customer = await customerSchema.findOne({
             username:req.query.username
         })
