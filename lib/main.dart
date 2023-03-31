@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:incredibleapp/HomePage.dart';
 
+import 'CustomMarkerInfoWindowState.dart';
 import 'colors.dart';
+import 'onBoard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: HomePage(),
+      home: CustomMarkerInfoWindowSate(),
     );
   }
 }
