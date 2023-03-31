@@ -81,7 +81,6 @@ userRouter.get('/getOffers',async (req,res)=>{
                 }
             }
         })
-
         if(possibleMerchants){
             res.status(200).send({
                 Message:'Success',
@@ -93,6 +92,7 @@ userRouter.get('/getOffers',async (req,res)=>{
                 Message:'No locations found'
             })
         }
+
     }catch(e){
         console.log(e)
         res.status(500).send({
@@ -122,11 +122,11 @@ userRouter.get('/createTestMerchant',async (req,res)=>{
     }
 })
 
-userRouter.post('/getRecentDeals',async (req,res)=>{
+userRouter.get('/getRecentDeals',async (req,res)=>{
     //
     try{
         const customer = await customerSchema.findOne({
-            username:req.body.username
+            username:req.query.username
         })
         if(customer){
             const recent_searches = customer.recent_search_categories;
@@ -140,7 +140,7 @@ userRouter.post('/getRecentDeals',async (req,res)=>{
                         $maxDistance:radian_distance,
                         $geometry:{
                             type:"Point",
-                            coordinates:[req.body.long,req.body.lat]
+                            coordinates:[req.query.long,req.query.lat]
                         }
                     }
                 },
@@ -217,6 +217,11 @@ userRouter.post('/getOffersBasedOnFrequency',async (req,res)=>{
             Message:'Failure' 
         })
     }
+})
+
+
+userRouter.get('/recommendationSystem',async (req,res)=>{
+    //
 })
 
 module.exports = userRouter
