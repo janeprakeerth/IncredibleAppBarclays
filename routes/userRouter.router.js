@@ -145,8 +145,7 @@ userRouter.get('/getRecentDeals',async (req,res)=>{
                         }
                     }
                 },
-                service_categories:
-                    last_search_topic
+                service_categories:{$all:[last_search_topic]}
             })
             if(possibleMerchants){
                 res.status(200).send({
