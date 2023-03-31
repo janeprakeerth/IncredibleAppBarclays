@@ -1,15 +1,4 @@
 const mongoose = require('mongoose')
-const pointSchema = new mongoose.Schema({
-    type: {
-      type: String,
-      enum: ['Point'],
-      required: true
-    },
-    coordinates: {
-      type: [Number],
-      required: true
-    }
-  });
 const merchantSchema = new mongoose.Schema({
     merchant_id:{
         type:String
@@ -41,8 +30,13 @@ const merchantSchema = new mongoose.Schema({
     }]
     },
     location:{
-        type:pointSchema
+        type: {
+            type: String,
+          },
+          coordinates: {
+            type: [Number]
+          }
     }
 })
-
+merchantSchema.index({ location: "2dsphere" });
 module.exports = mongoose.model('merchant',merchantSchema)

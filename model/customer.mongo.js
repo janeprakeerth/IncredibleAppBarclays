@@ -34,9 +34,7 @@ const customerSchema = new mongoose.Schema({
             bank_name:String,
             bank_id:String
         }]
-    },
-    recent_invoices:{
-        type:[invoice]
     }
 })
+
 module.exports = mongoose.model('customer',customerSchema)

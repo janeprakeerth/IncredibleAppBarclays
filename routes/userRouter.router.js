@@ -2,7 +2,11 @@ const customerSchema = require('../model/customer.mongo')
 const express = require('express')
 const userRouter = express.Router()
 const merchantSchema = require('../model/merchants.mongo')
-
+function kmToRadians(distance) {
+    const earthRadiusInKm = 6371; // Earth's radius in kilometers
+    const radiansPerDegree = Math.PI / 180;
+    return distance / earthRadiusInKm * radiansPerDegree;
+  }
 userRouter.post('/login',async (req,res)=>{
     try{
         const customer = customerSchema.findOne({
@@ -59,23 +63,20 @@ userRouter.post('/signup',async (req,res)=>{
     }
 })
 
-userRouter.post('/getOffers',async (req,res)=>{
+userRouter.get('/getOffers',async (req,res)=>{
     try{
         //required
         //user coordinates latitude and longitude
         //user search category
         //user radius
-        var max_latitude = 0;
-        var max_longitude = 0
-        var min_latitude = 0;
-        var min_longitude = 0;
+        const radian_distance = kmToRadians(req.query.distinKm) 
         const possibleMerchants = await merchantSchema.find({
             location:{
                 $near:{
-                    $maxDistance:1000,
+                    $maxDistance:radian_distance,
                     $geometry:{
                         type:"Point",
-                        coordinates:[req.body.long,req.body.lat]
+                        coordinates:[req.query.long,req.query.lat]
                     }
                 }
             }  
@@ -92,9 +93,31 @@ userRouter.post('/getOffers',async (req,res)=>{
             })
         }
     }catch(e){
+        console.log(e)
         res.status(500).send({
             Message:'Server Error'
         })
+    }
+})
+
+userRouter.get('/createTestMerchant',async (req,res)=>{
+    try{
+        const tm = new merchantSchema({
+            merchant_id:1,
+            merchant_name:'test_merchant',
+            location: {
+                type: "Point",
+                coordinates: [-112.110492,36.098948]
+            }
+        })
+        const t = await tm.save()
+        if(t){
+            res.status(200).send({
+                Message:'Saved'
+            })
+        }
+    }catch(e){
+        console.log(e)
     }
 })
 
