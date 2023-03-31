@@ -45,7 +45,10 @@ const merchantSchema = new mongoose.Schema({
         product_category:String,
         product_brand:String,
         product_model_no:String,
-        offer_id:String      
+        offer_id:String,
+        product_rating:Number,
+        no_of_purchases:Number,
+        reviews:[String]      
     }],
     merchant_visits:[String], //string of customer ids
     merchant_ratings:[{
@@ -57,7 +60,7 @@ const merchantSchema = new mongoose.Schema({
         type:Number,
         default:0
     },
-    IMG_URL:{
+    Img_url:{
         type:String
     }
 })
