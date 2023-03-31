@@ -323,4 +323,15 @@ userRouter.get('/topBankingPartners',async (req,res)=>{
     }
 })
 
+userRouter.get('/cardview',async (req,res)=>{
+    try{
+        res.render('cardview')
+    }catch(e){
+        res.status(500).send({
+            Message:'error'
+        })
+    }
+})
+
+
 module.exports = userRouter

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Chatbot Example</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f7f7;
+      }
+      #container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      #chat-window {
+        height: 300px;
+        overflow-y: scroll;
+        padding: 10px;
+        background-color: #f1f1f1;
+      }
+      #input-field {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-top: 1px solid #ddd;
+        background-color: #f9f9f9;
+        box-sizing: border-box;
+        font-size: 16px;
+      }
+      p {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Chatbot Example</h1>
+      <div id="chat-window"></div>
+      <input id="input-field" type="text" placeholder="Type your message here...">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
+    <script>
+      const model = tf.sequential();
+model.add(tf.layers.dense({inputShape: [4], units: 32, activation: 'relu'}));
+model.add(tf.layers.dense({units: 3, activation: 'softmax'}));
+model.compile({loss: 'categoricalCrossentropy', optimizer: 'adam', metrics: ['accuracy']});
+
+// Train the model
+const xs = tf.tensor2d([[0,0,1,1], [1,0,1,0], [0,1,0,1], [1,1,0,0]]);
+const ys = tf.tensor2d([[1,0,0], [0,0,1], [0,1,0], [1,0,0]]);
+model.fit(xs, ys, {epochs: 1000});
+
+// Define the intents and responses
+const intents = {
+  'greeting': ['Hi there!', 'Hello!', 'Nice to meet you.'],
+  'goodbye': ['Goodbye!', 'See you later.', 'Bye!'],
+  'thanks': ['Youre welcome!', 'No problem.']
+};
+
+// Define the chatbot logic
+function classifyInput(input) {
+  const encodedInput = tf.tensor2d([[input.includes('hi'), input.includes('bye'), input.includes('thanks'), input.length]]);
+  const prediction = model.predict(encodedInput).dataSync();
+  return prediction.indexOf(Math.max(...prediction));
+}
+
+function generateResponse(intent) {
+  const responses = intents[intent];
+  return responses[Math.floor(Math.random() * responses.length)];
+}
+
+// Define the UI behavior
+const inputField = document.getElementById('input-field');
+const chatWindow = document.getElementById('chat-window');
+
+inputField.addEventListener('keyup', (event) => {
+  if (event.key === 'Enter') {
+    const input = inputField.value;
+    const intent = classifyInput(input);
+    const response = generateResponse(intent);
+    chatWindow.innerHTML += `<p>User: ${input}</p><p>Bot: ${response}</p>`;
+    inputField.value = '';
+  }
+});
+    </script>
+  </body>
+</html>
