@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:incredibleapp/HomePage.dart';
+import 'package:incredibleapp/PolylineScreen.dart';
+import 'package:incredibleapp/directionsPoly.dart';
 
 import 'CustomMarkerInfoWindowState.dart';
 import 'colors.dart';
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: CustomMarkerInfoWindowSate(),
+      home: PolylineScreen(),
     );
   }
 }

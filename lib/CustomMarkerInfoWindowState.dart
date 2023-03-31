@@ -13,13 +13,12 @@ class _CustomMarkerInfoWindowSateState extends State<CustomMarkerInfoWindowSate>
   CustomInfoWindowController _customInfoWindowController = CustomInfoWindowController();
   final List<Marker> _markers = <Marker>[];
   final List<LatLng> _latlng = [
-    LatLng(33.6941 , 72.9734) ,LatLng(33.7008 , 72.9682),LatLng(33.6992 , 72.9744),
-    LatLng(33.6939 , 72.9771),LatLng(33.6910 , 72.9807),LatLng(33.7036 , 72.9785)
+    LatLng(13.0000 , 80.9807),LatLng(13.0000 , 80.9807),LatLng(13.0000 , 80.9807)
   ];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    loadData();
   }
 
   loadData(){
@@ -39,7 +38,7 @@ class _CustomMarkerInfoWindowSateState extends State<CustomMarkerInfoWindowSate>
       body: Stack(
         children: [
             GoogleMap(initialCameraPosition: CameraPosition(
-              target: LatLng(33.6941,72.9734),
+              target: LatLng(13.0826,80.2707),
 
             ),
               markers: Set<Marker>.of(_markers),
