@@ -79,8 +79,9 @@ userRouter.get('/getOffers',async (req,res)=>{
                         coordinates:[req.query.long,req.query.lat]
                     }
                 }
-            }  
+            }
         })
+
         if(possibleMerchants){
             res.status(200).send({
                 Message:'Success',
@@ -121,9 +122,57 @@ userRouter.get('/createTestMerchant',async (req,res)=>{
     }
 })
 
-
-userRouter.post('/getDeals',async (req,res)=>{
-    //get search history of user 
+userRouter.post('/getRecentDeals',async (req,res)=>{
+    //
+    try{
+        const customer = await customerSchema.findOne({
+            username:req.body.username
+        })
+        if(customer){
+            const recent_searches = customer.recent_search_categories;
+            //last search
+            const last_search_topic = recent_searches[recent_searches.length-1]
+            //get offers in nearby location
+            //get latitude, longitude, use category filter
+            const possibleMerchants = await merchantSchema.find({
+                location:{
+                    $near:{
+                        $maxDistance:radian_distance,
+                        $geometry:{
+                            type:"Point",
+                            coordinates:[req.body.long,req.body.lat]
+                        }
+                    }
+                },
+                service_categories:{
+                    last_search_topic
+                }
+            })
+            if(possibleMerchants){
+                res.status(200).send({
+                    Message:'Success',
+                    possiblemerchants:possibleMerchants
+                })
+            }
+            else{
+                res.status(200).send({
+                    Message:'Failure'
+                })
+            }
+        }
+        else{
+            res.status(200).send({
+                Message:'User not found'
+            })
+        }
+    }catch(e){
+        console.log(e)
+        res.status(500).send({
+            Message:'Error'
+        })
+    }
 })
+
+
 
 module.exports = userRouter
