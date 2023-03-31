@@ -272,6 +272,33 @@ userRouter.get('/suggestAlternatives',async (req,res)=>{
     }
 })
 
-
+userRouter.get('/productsByStore',async (req,res)=>{
+    try{
+        //
+        const r = await merchantSchema.find({
+            merchant_id:req.query.merchant_id,
+            product_catalogue:{
+                $elemMatch:{
+                    product_category:req.query.product_category
+                }
+            }
+        })
+        if(r){
+            res.status(200).send({
+                Message:'Success',
+                products:r
+            })
+        }
+        else{
+            res.status(200).send({
+                Message:'Failure'
+            })
+        }
+    }catch(e){
+        res.status(500).send({
+            Message:'Error'
+        })
+    }
+})
 
 module.exports = userRouter
