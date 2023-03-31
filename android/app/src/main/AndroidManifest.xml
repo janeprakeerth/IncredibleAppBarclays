@@ -6,7 +6,10 @@
     <application
         android:label="incredibleapp"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        >
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBXp4dfDFDuGtxU5nyGPWy-NJzot9oYsgM"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
