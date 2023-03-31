@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart';
 import 'package:incredibleapp/small_text.dart';
 
 import 'app_column.dart';
@@ -20,6 +23,9 @@ class _HomePageState extends State<HomePage> {
   double _currPageValue = 0.0;
   double scalefactor = 0.8;
   double height = 35;
+  List<Container> container = [];
+  var futures;
+  Map? mapUserInfo;
 
   @override
   getCordinate() async {
@@ -29,6 +35,38 @@ class _HomePageState extends State<HomePage> {
         desiredAccuracy: LocationAccuracy.high);
     print(currentUserPosition?.latitude);
     print(currentUserPosition?.longitude);
+    return getHomeDetails(
+        currentUserPosition?.latitude, currentUserPosition?.longitude);
+  }
+
+  List<Container> getPages(Map? mapUserinfo) {
+    var container1 = Container(
+      height: Dimensions.pageView,
+      child: PageView.builder(
+          controller: pageController,
+          itemCount: 5,
+          itemBuilder: (context, position) {
+            return _buildPageItem(position);
+          }),
+    );
+    container.add(container1);
+    return container;
+  }
+
+  getHomeDetails(double? latitude, double? longitude) async {
+    if (latitude != Null && longitude != Null) {
+      final url =
+          "https://incredibleapp-production.up.railway.app/getRecentDeals?long=${longitude}&lat=${latitude}&distinKm=10&username=rb0585";
+      print(url);
+      var response = await get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        mapUserInfo = json.decode(response.body);
+        print("mapUserInfo  : $mapUserInfo");
+      } else {
+        print(response.statusCode);
+      }
+      return getPages(mapUserInfo);
+    }
   }
 
   void initState() {
@@ -37,7 +75,8 @@ class _HomePageState extends State<HomePage> {
         _currPageValue = pageController.page!;
       });
     });
-    getCordinate();
+    futures = getCordinate();
+    print(mapUserInfo);
   }
 
   Widget build(BuildContext context) {
@@ -45,24 +84,28 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           SizedBox(
-            height: 10,
+            height: 70,
           ),
-          Expanded(
-              child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  height: Dimensions.pageView,
-                  child: PageView.builder(
-                      controller: pageController,
-                      itemCount: 5,
-                      itemBuilder: (context, position) {
-                        return _buildPageItem(position);
-                      }),
-                ),
-              ],
-            ),
-          ))
+          // Expanded(
+          //     child: SingleChildScrollView(
+          //   child: Column(
+          //     children: [],
+          //   ),
+          // )),
+          FutureBuilder(
+            future: futures,
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.data == null) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return Column(
+                  children: snapshot.data,
+                );
+              }
+            },
+          ),
         ],
       ),
     );
@@ -76,21 +119,21 @@ class _HomePageState extends State<HomePage> {
       matrix = Matrix4.diagonal3Values(1, currScale, 1)
         ..setTranslationRaw(0, currTrans, 0);
     } else if (Index == _currPageValue.floor() + 1) {
-      var currScale =
-          scalefactor + (_currPageValue - Index + 1) * (1 - scalefactor);
-      var currTrans = height * (1 - currScale) / 2;
-      matrix = Matrix4.diagonal3Values(1, currScale, 1)
-        ..setTranslationRaw(1, currTrans, 1);
+      // var currScale =
+      //     scalefactor + (_currPageValue - Index + 1) * (1 - scalefactor);
+      // var currTrans = height * (1 - currScale) / 2;
+      // matrix = Matrix4.diagonal3Values(1, currScale, 1)
+      //   ..setTranslationRaw(1, currTrans, 1);
     } else if (Index == _currPageValue.floor() - 1) {
-      var currScale = 1 - (_currPageValue - Index) * (1 - scalefactor);
-      var currTrans = height * (1 - currScale) / 2;
-      matrix = Matrix4.diagonal3Values(1, currScale, 1)
-        ..setTranslationRaw(1, currTrans, 1);
+      // var currScale = 1 - (_currPageValue - Index) * (1 - scalefactor);
+      // var currTrans = height * (1 - currScale) / 2;
+      // matrix = Matrix4.diagonal3Values(1, currScale, 1)
+      //   ..setTranslationRaw(1, currTrans, 1);
     } else {
-      var currScale = 0.8;
-      var currTrans = height * (1 - currScale) / 2;
-      matrix = Matrix4.diagonal3Values(1, currScale, 1)
-        ..setTranslationRaw(1, currTrans, 1);
+      // var currScale = 0.8;
+      // var currTrans = height * (1 - currScale) / 2;
+      // matrix = Matrix4.diagonal3Values(1, currScale, 1)
+      //   ..setTranslationRaw(1, currTrans, 1);
     }
     return Transform(
       transform: matrix,
@@ -105,7 +148,8 @@ class _HomePageState extends State<HomePage> {
               color:
                   Index.isEven ? AppColors.mainColor : AppColors.mainBlackColor,
               image: DecorationImage(
-                  image: AssetImage("assets/image/food1.jpg"),
+                  image: NetworkImage(
+                      "https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
                   fit: BoxFit.cover),
             ),
           ),
