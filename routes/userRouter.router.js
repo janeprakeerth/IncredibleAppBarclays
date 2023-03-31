@@ -70,13 +70,15 @@ userRouter.get('/getOffers',async (req,res)=>{
         //user search category
         //user radius
         const radian_distance = kmToRadians(req.query.distinKm) 
+        console.log(radian_distance)
+        console.log(Number(req.query.long))
         const possibleMerchants = await merchantSchema.find({
             location:{
                 $near:{
-                    $maxDistance:radian_distance,
+                    $maxDistance:req.query.distinKm*1000,
                     $geometry:{
                         type:"Point",
-                        coordinates:[req.query.long,req.query.lat]
+                        coordinates:[Number(req.query.long),Number(req.query.lat)]
                     }
                 }
             }
@@ -125,7 +127,8 @@ userRouter.get('/createTestMerchant',async (req,res)=>{
 userRouter.get('/getRecentDeals',async (req,res)=>{
     //
     try{
-        const radian_distance = kmToRadians(req.query.distinKm?req.query.distinKm:40)
+        const radian_distance = kmToRadians(40)
+        console.log(radian_distance)
         const customer = await customerSchema.findOne({
             username:req.query.username
         })
@@ -138,10 +141,10 @@ userRouter.get('/getRecentDeals',async (req,res)=>{
             const possibleMerchants = await merchantSchema.find({
                 location:{
                     $near:{
-                        $maxDistance:radian_distance,
+                        $maxDistance:req.query.distinKm*1000,
                         $geometry:{
                             type:"Point",
-                            coordinates:[req.query.long,req.query.lat]
+                            coordinates:[Number(req.query.long),Number(req.query.lat)]
                         }
                     }
                 },
