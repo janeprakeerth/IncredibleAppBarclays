@@ -11,7 +11,6 @@ app.use(express.urlencoded({
 app.set('view engine','ejs')
 app.use(cors());
 app.use(express.json());
-
 app.use(userRouter);
 
 module.exports = app 

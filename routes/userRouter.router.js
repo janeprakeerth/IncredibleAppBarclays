@@ -109,7 +109,7 @@ userRouter.get("/createTestMerchant", async (req, res) => {
       },
     });
     const t = await tm.save();
-    if (t) {
+    if(t){
       res.status(200).send({
         Message: "Saved",
       });
@@ -256,3 +256,5 @@ userRouter.get('/suggestAlternatives',async (req,res)=>{
         })
     }
 })
+
+module.exports = userRouter
