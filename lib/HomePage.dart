@@ -40,11 +40,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Container> getPages(Map? mapUserinfo) {
+    List<dynamic> details = mapUserInfo?['possiblemerchants'];
     var container1 = Container(
       height: Dimensions.pageView,
       child: PageView.builder(
           controller: pageController,
-          itemCount: 5,
+          itemCount: details.length,
           itemBuilder: (context, position) {
             return _buildPageItem(position);
           }),
@@ -56,7 +57,7 @@ class _HomePageState extends State<HomePage> {
   getHomeDetails(double? latitude, double? longitude) async {
     if (latitude != Null && longitude != Null) {
       final url =
-          "https://incredibleapp-production.up.railway.app/getRecentDeals?long=${longitude}&lat=${latitude}&distinKm=10&username=rb0585";
+          "https://incredibleapp-production.up.railway.app/getRecentDeals?long=${longitude}&lat=${latitude}&distinKm=100&username=rb0585";
       print(url);
       var response = await get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -81,17 +82,39 @@ class _HomePageState extends State<HomePage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffFFF1ED),
+      appBar: AppBar(
+        backgroundColor: Color(0xffE8553C),
+        elevation: 0,
+        title: Text(
+          "        Incredible App",
+          textAlign: TextAlign.center,
+        ),
+        leading: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.menu),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.search),
+          ),
+        ],
+      ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 70,
+            height: 20,
           ),
-          // Expanded(
-          //     child: SingleChildScrollView(
-          //   child: Column(
-          //     children: [],
-          //   ),
-          // )),
+          Text(
+            "         Shops Near You",
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w400, fontSize: 20),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           FutureBuilder(
             future: futures,
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -178,7 +201,13 @@ class _HomePageState extends State<HomePage> {
                     left: Dimensions.height15,
                     right: Dimensions.height15),
                 child: AppColumn(
-                  text: "Vegetables",
+                  text: mapUserInfo?['possiblemerchants'][Index]
+                      ['merchant_name'],
+                  rating: mapUserInfo?['possiblemerchants'][Index]
+                      ['merchant_average_rating'],
+                  total_ratings: mapUserInfo?['possiblemerchants'][Index]
+                          ['merchant_ratings']
+                      .length,
                 ),
               ),
             ),
