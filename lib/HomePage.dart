@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
+import 'package:incredibleapp/ShopDetails.dart';
 import 'package:incredibleapp/small_text.dart';
 
 import 'app_column.dart';
@@ -162,18 +163,30 @@ class _HomePageState extends State<HomePage> {
       transform: matrix,
       child: Stack(
         children: [
-          Container(
-            height: Dimensions.pageViewContainer,
-            margin: EdgeInsets.only(
-                left: Dimensions.height10, right: Dimensions.height10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Dimensions.radius30),
-              color:
-                  Index.isEven ? AppColors.mainColor : AppColors.mainBlackColor,
-              image: DecorationImage(
-                  image: NetworkImage(
-                      "https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"),
-                  fit: BoxFit.cover),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ShopDetails(mapUserInfo: mapUserInfo!, Index: Index),
+                ),
+              );
+            },
+            child: Container(
+              height: Dimensions.pageViewContainer,
+              margin: EdgeInsets.only(
+                  left: Dimensions.height10, right: Dimensions.height10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(Dimensions.radius30),
+                color: Index.isEven
+                    ? AppColors.mainColor
+                    : AppColors.mainBlackColor,
+                image: DecorationImage(
+                    image: NetworkImage(
+                        "${mapUserInfo?['possiblemerchants'][Index]['Img_url']}"),
+                    fit: BoxFit.cover),
+              ),
             ),
           ),
           Align(
