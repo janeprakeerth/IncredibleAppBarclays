@@ -81,10 +81,25 @@ userRouter.get("/getOffers", async (req, res) => {
       },
     });
     if (possibleMerchants) {
-      res.status(200).send({
-        Message: "Success",
-        merchants: possibleMerchants,
-      });
+      const r = await customerSchema.updateOne({
+        username:req.query.username,
+
+      },{
+        $push:{
+            recent_search_categories:req.query.category     
+        }
+      })
+      if(r){
+          res.status(200).send({
+            Message: "Success",
+            merchants: possibleMerchants,
+          });
+      }
+      else{
+        res.status(200).send({
+            Message:'Error'
+        })
+      }
     } else {
       res.status(200).send({
         Message: "No locations found",
@@ -256,5 +271,7 @@ userRouter.get('/suggestAlternatives',async (req,res)=>{
         })
     }
 })
+
+
 
 module.exports = userRouter
