@@ -8,7 +8,14 @@ import 'icon_and_text_widget.dart';
 
 class AppColumn extends StatelessWidget {
   final String text;
-  const AppColumn({Key? key, required this.text}) : super(key: key);
+  final int rating;
+  final int total_ratings;
+  const AppColumn(
+      {Key? key,
+      required this.text,
+      required this.rating,
+      required this.total_ratings})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +33,20 @@ class AppColumn extends StatelessWidget {
           children: [
             Wrap(
               children: List.generate(
-                  5,
+                  rating,
                   (index) => Icon(
                         Icons.star,
                         color: AppColors.mainColor,
                       )),
             ),
             SmallText(
-              text: "4.5",
+              text: "${rating}",
             ),
             SizedBox(
               width: Dimensions.width10,
             ),
             SmallText(
-              text: "1287",
+              text: "${total_ratings}",
             ),
             SizedBox(
               width: Dimensions.width10,
