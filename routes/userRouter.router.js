@@ -222,8 +222,16 @@ userRouter.post('/getOffersBasedOnFrequency',async (req,res)=>{
 })
 
 
-userRouter.get('/recommendationSystem',async (req,res)=>{
-    //
+userRouter.get('/suggestAlternatives',async (req,res)=>{
+    try{
+        //get current offer figures
+        //Banks etc. check rankings
+        //get weightage
+    }catch(e){
+        res.status(500).send({
+            Message:'Server Error'
+        })
+    }
 })
 
 module.exports = userRouter

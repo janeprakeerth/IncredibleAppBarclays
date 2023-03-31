@@ -56,6 +56,9 @@ const merchantSchema = new mongoose.Schema({
     merchant_average_rating:{
         type:Number,
         default:0
+    },
+    IMG_URL:{
+        type:String
     }
 })
 merchantSchema.index({ location: "2dsphere" });
