@@ -13,6 +13,7 @@ const merchantSchema = new mongoose.Schema({
         type:[{
             Offer_id:String,
             Offer_Category:String,
+            Offer_description:String,
             Applicable_Payment_Methods:[String],
             Applicable_Banking_Partners:[{
                Bank_ID:String,
@@ -36,6 +37,24 @@ const merchantSchema = new mongoose.Schema({
           coordinates: {
             type: [Number]
           }
+    },
+    product_catalogue:[{
+        product_id:String,
+        product_name:String,
+        product_category:String,
+        product_brand:String,
+        product_model_no:String,
+        offer_id:String      
+    }],
+    merchant_visits:[String],
+    merchant_ratings:[{
+        Customer_id:String,
+        Rating:Number,
+        Review:String  
+    }],
+    merchant_average_rating:{
+        type:Number,
+        default:0
     }
 })
 merchantSchema.index({ location: "2dsphere" });

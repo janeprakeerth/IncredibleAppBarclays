@@ -121,4 +121,9 @@ userRouter.get('/createTestMerchant',async (req,res)=>{
     }
 })
 
+
+userRouter.post('/getDeals',async (req,res)=>{
+    //get search history of user 
+})
+
 module.exports = userRouter
