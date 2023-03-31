@@ -10,7 +10,7 @@ const merchantSchema = new mongoose.Schema({
         type:[String]
     },
     Offers:{
-        type:[{
+        items:[{
             Offer_id:String,
             Offer_Category:String,
             Offer_description:String,
@@ -22,14 +22,15 @@ const merchantSchema = new mongoose.Schema({
                 type:Number,
                 default:0
                }
-            }],
-            Offer_purchases:[{
-                Customer_ID:String,
-                purchase_method:String,
-                Banking_partner:String
             }]
     }]
     },
+            Offer_purchases:[{
+                Customer_ID:String,
+                purchase_method:String,
+                Banking_partner:String,
+                offer_id:String
+            }],
     location:{
         type: {
             type: String,
