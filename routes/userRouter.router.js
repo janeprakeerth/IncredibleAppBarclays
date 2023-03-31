@@ -224,9 +224,32 @@ userRouter.post('/getOffersBasedOnFrequency',async (req,res)=>{
 
 userRouter.get('/suggestAlternatives',async (req,res)=>{
     try{
-        //get current offer figures
-        //Banks etc. check rankings
-        //get weightage
+        const r = await merchantSchema.find({
+            location:{
+                $near:{
+                    $maxDistance:req.query.distinKm*1000,
+                    $geometry:{
+                        type:"Point",
+                        coordinates:[Number(req.query.long),Number(req.query.lat)]
+                    }
+                }
+            },
+            service_categories:{$all:[req.query.search_category]},
+            product_catalogue:{$elemMatch:{
+                product_model_no:req.query.product_model_no
+            }}
+        })
+        if(r){
+            res.status(200).send({
+                Message:'Success',
+                merchants:r
+             })
+        }
+        else{
+            res.status(200).send({
+                Message:'Failure' 
+            })
+        }
     }catch(e){
         res.status(500).send({
             Message:'Server Error'
