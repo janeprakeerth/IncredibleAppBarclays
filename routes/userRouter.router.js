@@ -2,6 +2,7 @@ const customerSchema = require("../model/customer.mongo");
 const express = require("express");
 const userRouter = express.Router();
 const merchantSchema = require("../model/merchants.mongo");
+const bankingSchema = require('../model/bankingpartners.mongo')
 function kmToRadians(distance) {
   const earthRadiusInKm = 6371; // Earth's radius in kilometers
   const radiansPerDegree = Math.PI / 180;
@@ -300,5 +301,27 @@ userRouter.get('/productsByStore',async (req,res)=>{
         })
     }
 })
+
+userRouter.get('/topBankingPartners',async (req,res)=>{
+    try{
+        const t = await bankingSchema.find()
+        if(t){
+            res.status(200).send({
+                Message:'Success',
+                partners:t
+            })
+        }
+        else{
+            res.status(200).send({
+                Message:'Failure'
+            })
+        }
+    }catch(e){
+        res.status(500).send({
+            Message:''
+        })
+    }
+})
+
 
 module.exports = userRouter
