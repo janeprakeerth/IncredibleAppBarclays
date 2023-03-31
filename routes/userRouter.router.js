@@ -318,10 +318,9 @@ userRouter.get('/topBankingPartners',async (req,res)=>{
         }
     }catch(e){
         res.status(500).send({
-            Message:''
+            Message:'Error'
         })
     }
 })
-
 
 module.exports = userRouter
