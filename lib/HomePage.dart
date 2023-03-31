@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
           Text(
             "         Shops Near You",
             style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w400, fontSize: 20),
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
           ),
           SizedBox(
             height: 10,
@@ -130,6 +130,21 @@ class _HomePageState extends State<HomePage> {
               }
             },
           ),
+          Text(
+            "         Around You",
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          Center(
+            child: Container(
+              width: 320,
+              height: 250,
+              child: Image(
+                image: NetworkImage(
+                    "https://mologmedia.s3.ap-south-1.amazonaws.com/GoogleMapImage.png"),
+              ),
+            ),
+          )
         ],
       ),
     );

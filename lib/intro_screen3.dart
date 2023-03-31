@@ -6,7 +6,7 @@ class intro_screen3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.deepPurple,
+      color: Color(0xffFFF1ED),
     );
   }
 }
