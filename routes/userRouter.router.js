@@ -168,51 +168,51 @@ userRouter.get("/getRecentDeals", async (req, res) => {
   }
 });
 
-// userRouter.post('/getOffersBasedOnFrequency',async (req,res)=>{
-//     try{
-//         const customer = await customerSchema.findOne({
-//             username:req.body.username
-//         })
-//         if(customer){
-//             const recent_searches = customer.recent_search_categories;
-//             const occurrences = recent_searches.reduce(function (acc, curr) {
-//                 return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
-//               }, {});
-//             let sortable=[];
-//             for(i in occurrences){
-//                 sortable.push([i,occurrences[i]])
-//             }
-//             sortable.sort(function(a,b){
-//                 a[1]-b[1]
-//             })
-//             const most_frequent_category = sortable[sortable.length-1][0]
-//             //now find offers
-//             const reqd_merchants = await merchantSchema.find({
-//                 Offers:{
-//                     $elemMatch:{
-//                         Offer_category:most_frequent_category
-//                     }
-//                 }
-//             })
+userRouter.post('/getOffersBasedOnFrequency',async (req,res)=>{
+    try{
+        const customer = await customerSchema.findOne({
+            username:req.body.username
+        })
+        if(customer){
+            const recent_searches = customer.recent_search_categories;
+            const occurrences = recent_searches.reduce(function (acc, curr) {
+                return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+              }, {});
+            let sortable=[];
+            for(i in occurrences){
+                sortable.push([i,occurrences[i]])
+            }
+            sortable.sort(function(a,b){
+                a[1]-b[1]
+            })
+            const most_frequent_category = sortable[sortable.length-1][0]
+            //now find offers
+            const reqd_merchants = await merchantSchema.find({
+                Offers:{
+                    $elemMatch:{
+                        Offer_category:most_frequent_category
+                    }
+                }
+            })
 
-//             if(reqd_merchants){
-//                 res.status(200).send({
-//                     Message:'Success',
-//                     merchants:reqd_merchants
-//                 })
-//             }
-//             else{
-//                 res.status(200).send({
-//                     Message:'Failure'
-//                 })
-//             }
-//         }
-//     }catch(e){
-//         res.status(500).send({
-//             Message:'Failure'
-//         })
-//     }
-// })
+            if(reqd_merchants){
+                res.status(200).send({
+                    Message:'Success',
+                    merchants:reqd_merchants
+                })
+            }
+            else{
+                res.status(200).send({
+                    Message:'Failure'
+                })
+            }
+        }
+    }catch(e){
+        res.status(500).send({
+            Message:'Failure'
+        })
+    }
+})
 
 // To add new merchants
 userRouter.post("/newMerchant", (req, res) => {
