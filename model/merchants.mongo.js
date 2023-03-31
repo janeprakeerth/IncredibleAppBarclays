@@ -46,7 +46,7 @@ const merchantSchema = new mongoose.Schema({
         product_model_no:String,
         offer_id:String      
     }],
-    merchant_visits:[String],
+    merchant_visits:[String], //string of customer ids
     merchant_ratings:[{
         Customer_id:String,
         Rating:Number,
