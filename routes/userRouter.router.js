@@ -2,9 +2,10 @@ const customerSchema = require("../model/customer.mongo");
 const express = require("express");
 const userRouter = express.Router();
 const merchantSchema = require("../model/merchants.mongo");
-const bankingSchema = require('../model/bankingpartners.mongo')
+const bankingSchema = require("../model/bankingpartners.mongo");
 function kmToRadians(distance) {
   const earthRadiusInKm = 6371; // Earth's radius in kilometers
+
   const radiansPerDegree = Math.PI / 180;
   return (distance / earthRadiusInKm) * radiansPerDegree;
 }
@@ -82,24 +83,25 @@ userRouter.get("/getOffers", async (req, res) => {
       },
     });
     if (possibleMerchants) {
-      const r = await customerSchema.updateOne({
-        username:req.query.username,
-
-      },{
-        $push:{
-            recent_search_categories:req.query.category     
+      const r = await customerSchema.updateOne(
+        {
+          username: req.query.username,
+        },
+        {
+          $push: {
+            recent_search_categories: req.query.category,
+          },
         }
-      })
-      if(r){
-          res.status(200).send({
-            Message: "Success",
-            merchants: possibleMerchants,
-          });
-      }
-      else{
+      );
+      if (r) {
         res.status(200).send({
-            Message:'Error'
-        })
+          Message: "Success",
+          merchants: possibleMerchants,
+        });
+      } else {
+        res.status(200).send({
+          Message: "Error",
+        });
       }
     } else {
       res.status(200).send({
@@ -125,7 +127,7 @@ userRouter.get("/createTestMerchant", async (req, res) => {
       },
     });
     const t = await tm.save();
-    if(t){
+    if (t) {
       res.status(200).send({
         Message: "Saved",
       });
@@ -184,51 +186,50 @@ userRouter.get("/getRecentDeals", async (req, res) => {
   }
 });
 
-userRouter.post('/getOffersBasedOnFrequency',async (req,res)=>{
-    try{
-        const customer = await customerSchema.findOne({
-            username:req.body.username
-        })
-        if(customer){
-            const recent_searches = customer.recent_search_categories;
-            const occurrences = recent_searches.reduce(function (acc, curr) {
-                return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
-              }, {});
-            let sortable=[];
-            for(i in occurrences){
-                sortable.push([i,occurrences[i]])
-            }
-            sortable.sort(function(a,b){
-                a[1]-b[1]
-            })
-            const most_frequent_category = sortable[sortable.length-1][0]
-            //now find offers
-            const reqd_merchants = await merchantSchema.find({
-                Offers:{
-                    $elemMatch:{
-                        Offer_category:most_frequent_category
-                    }
-                }
-            })
+userRouter.post("/getOffersBasedOnFrequency", async (req, res) => {
+  try {
+    const customer = await customerSchema.findOne({
+      username: req.body.username,
+    });
+    if (customer) {
+      const recent_searches = customer.recent_search_categories;
+      const occurrences = recent_searches.reduce(function (acc, curr) {
+        return acc[curr] ? ++acc[curr] : (acc[curr] = 1), acc;
+      }, {});
+      let sortable = [];
+      for (i in occurrences) {
+        sortable.push([i, occurrences[i]]);
+      }
+      sortable.sort(function (a, b) {
+        a[1] - b[1];
+      });
+      const most_frequent_category = sortable[sortable.length - 1][0];
+      //now find offers
+      const reqd_merchants = await merchantSchema.find({
+        Offers: {
+          $elemMatch: {
+            Offer_category: most_frequent_category,
+          },
+        },
+      });
 
-            if(reqd_merchants){
-                res.status(200).send({
-                    Message:'Success',
-                    merchants:reqd_merchants
-                })
-            }
-            else{
-                res.status(200).send({
-                    Message:'Failure'
-                })
-            }
-        }
-    }catch(e){
-        res.status(500).send({
-            Message:'Failure'
-        })
+      if (reqd_merchants) {
+        res.status(200).send({
+          Message: "Success",
+          merchants: reqd_merchants,
+        });
+      } else {
+        res.status(200).send({
+          Message: "Failure",
+        });
+      }
     }
-})
+  } catch (e) {
+    res.status(500).send({
+      Message: "Failure",
+    });
+  }
+});
 
 // To add new merchants
 userRouter.post("/newMerchant", (req, res) => {
@@ -238,100 +239,98 @@ userRouter.post("/newMerchant", (req, res) => {
   addData ? res.send("Success") : res.send("Error");
 });
 
-userRouter.get('/suggestAlternatives',async (req,res)=>{
-    try{
-        const r = await merchantSchema.find({
-            location:{
-                $near:{
-                    $maxDistance:req.query.distinKm*1000,
-                    $geometry:{
-                        type:"Point",
-                        coordinates:[Number(req.query.long),Number(req.query.lat)]
-                    }
-                }
-            },
-            service_categories:{$all:[req.query.search_category]},
-            product_catalogue:{$elemMatch:{
-                product_model_no:req.query.product_model_no
-            }}
-        })
-        if(r){
-            res.status(200).send({
-                Message:'Success',
-                merchants:r
-             })
-        }
-        else{
-            res.status(200).send({
-                Message:'Failure' 
-            })
-        }
-    }catch(e){
-        res.status(500).send({
-            Message:'Server Error'
-        })
+userRouter.get("/suggestAlternatives", async (req, res) => {
+  try {
+    const r = await merchantSchema.find({
+      location: {
+        $near: {
+          $maxDistance: req.query.distinKm * 1000,
+          $geometry: {
+            type: "Point",
+            coordinates: [Number(req.query.long), Number(req.query.lat)],
+          },
+        },
+      },
+      service_categories: { $all: [req.query.search_category] },
+      product_catalogue: {
+        $elemMatch: {
+          product_model_no: req.query.product_model_no,
+        },
+      },
+    });
+    if (r) {
+      res.status(200).send({
+        Message: "Success",
+        merchants: r,
+      });
+    } else {
+      res.status(200).send({
+        Message: "Failure",
+      });
     }
-})
+  } catch (e) {
+    res.status(500).send({
+      Message: "Server Error",
+    });
+  }
+});
 
-userRouter.get('/productsByStore',async (req,res)=>{
-    try{
-        //
-        const r = await merchantSchema.find({
-            merchant_id:req.query.merchant_id,
-            product_catalogue:{
-                $elemMatch:{
-                    product_category:req.query.product_category
-                }
-            }
-        })
-        if(r){
-            res.status(200).send({
-                Message:'Success',
-                products:r
-            })
-        }
-        else{
-            res.status(200).send({
-                Message:'Failure'
-            })
-        }
-    }catch(e){
-        res.status(500).send({
-            Message:'Error'
-        })
+userRouter.get("/productsByStore", async (req, res) => {
+  try {
+    //
+    const r = await merchantSchema.find({
+      merchant_id: req.query.merchant_id,
+      product_catalogue: {
+        $elemMatch: {
+          product_category: req.query.product_category,
+        },
+      },
+    });
+    if (r) {
+      res.status(200).send({
+        Message: "Success",
+        products: r,
+      });
+    } else {
+      res.status(200).send({
+        Message: "Failure",
+      });
     }
-})
+  } catch (e) {
+    res.status(500).send({
+      Message: "Error",
+    });
+  }
+});
 
-userRouter.get('/topBankingPartners',async (req,res)=>{
-    try{
-        const t = await bankingSchema.find()
-        if(t){
-            res.status(200).send({
-                Message:'Success',
-                partners:t
-            })
-        }
-        else{
-            res.status(200).send({
-                Message:'Failure'
-            })
-        }
-    }catch(e){
-        res.status(500).send({
-            Message:'Error'
-        })
+userRouter.get("/topBankingPartners", async (req, res) => {
+  try {
+    const t = await bankingSchema.find();
+    if (t) {
+      res.status(200).send({
+        Message: "Success",
+        partners: t,
+      });
+    } else {
+      res.status(200).send({
+        Message: "Failure",
+      });
     }
-})
+  } catch (e) {
+    res.status(500).send({
+      Message: "Error",
+    });
+  }
+});
 
-userRouter.get('/cardview',async (req,res)=>{
-    try{
-        res.render('cardview')
-    }catch(e){
-        res.status(500).send({
-            Message:'error'
-        })
-    }
-})
+userRouter.get("/cardview", async (req, res) => {
+  try {
+    res.render("cardview");
+  } catch (e) {
+    res.status(500).send({
+      Message: "error",
+    });
+  }
+});
 
-
-module.exports = userRouter
+module.exports = userRouter;
