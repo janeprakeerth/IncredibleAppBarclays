@@ -14,7 +14,7 @@ class _PolylineScreenState extends State<PolylineScreen> {
   Completer<GoogleMapController> _controller = Completer();
 
   CameraPosition _kGooglePlex =
-      CameraPosition(target: LatLng(13.0826, 80.2707), zoom: 14);
+      CameraPosition(target: LatLng(12.8233132, 80.0422737), zoom: 14);
 
   final Set<Marker> _markers = {};
   final Set<Polyline> _polyline = {};
