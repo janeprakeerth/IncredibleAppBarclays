@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:incredibleapp/HomePage.dart';
 import 'package:incredibleapp/PolylineScreen.dart';
 import 'package:incredibleapp/directionsPoly.dart';
-import 'package:incredibleapp/login.dart';
 
 import 'CustomMarkerInfoWindowState.dart';
 import 'colors.dart';
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: LoginDemo(),
+      home: OnBoard(),
     );
   }
 }

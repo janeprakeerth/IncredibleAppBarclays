@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:incredibleapp/ProductsDetails.dart';
 import 'package:incredibleapp/small_text.dart';
 
 import 'big_Text.dart';
@@ -47,7 +48,19 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
       var button = Container(
         margin: EdgeInsets.only(right: 10),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductsDetails(
+                  productCategory: mapuserInfo['possiblemerchants'][Index]
+                      ['service_categories'][i],
+                  merchantId: mapuserInfo['possiblemerchants'][Index]
+                      ['merchant_id'],
+                ),
+              ),
+            );
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xffE8553C),
             shape: RoundedRectangleBorder(

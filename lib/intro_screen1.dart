@@ -6,7 +6,11 @@ class intro_screen1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.pink,
+      child: Image(
+        image: NetworkImage(
+            "https://mologmedia.s3.ap-south-1.amazonaws.com/first_page_image.png"),
+      ),
+      color: Color(0xffFFF1ED),
     );
   }
 }
