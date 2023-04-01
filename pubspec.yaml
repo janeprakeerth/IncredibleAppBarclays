@@ -45,6 +45,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0
   custom_info_window: ^1.0.1
   google_map_polyline_new: ^0.3.0+2
+  flutter_local_notifications: ^13.0.0
 
 
 dependency_overrides:
